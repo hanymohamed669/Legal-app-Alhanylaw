@@ -1,0 +1,5 @@
+{
+  "name": "إدارة قانونية",
+  "description": "A professional legal case management web app to manage cases, an archive, and tasks. Features include notifications, Google Maps integration, and smart search filters.",
+  "requestFramePermissions": []
+}
