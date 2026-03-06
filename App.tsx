@@ -17,12 +17,29 @@ import ClientsPage from './pages/ClientsPage';
 import ArchivePage from './pages/ArchivePage';
 
 const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-100">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+  
   return user ? children : <Navigate to="/login" />;
 };
 
 const AppRoutes: React.FC = () => {
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
+
+    if (loading) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-slate-100">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        </div>
+      );
+    }
 
     return (
         <Routes>
@@ -138,13 +155,11 @@ const AppRoutes: React.FC = () => {
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <GoogleAuthProvider>
         <div className="bg-slate-200 min-h-screen font-sans">
             <HashRouter>
                 <AppRoutes/>
             </HashRouter>
         </div>
-      </GoogleAuthProvider>
     </AuthProvider>
   );
 };

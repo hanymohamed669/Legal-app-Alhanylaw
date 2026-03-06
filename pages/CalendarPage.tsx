@@ -251,8 +251,8 @@ const ListView: React.FC<{ sessions: Session[] }> = ({ sessions }) => {
     const upcomingSessions = sessions.filter(s => new Date(s.dateTime) >= now).sort((a,b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
     const pastSessions = sessions.filter(s => new Date(s.dateTime) < now).sort((a,b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime());
 
-    const SessionCard = ({ session, isPast = false }: { session: Session, isPast?: boolean}) => (
-        <div key={session.id} className={`bg-surface rounded-lg shadow p-4 flex flex-col md:flex-row items-start space-x-4 space-x-reverse ${isPast ? 'opacity-70' : ''}`}>
+    const SessionCard: React.FC<{ session: Session, isPast?: boolean }> = ({ session, isPast = false }) => (
+        <div className={`bg-surface rounded-lg shadow p-4 flex flex-col md:flex-row items-start space-x-4 space-x-reverse ${isPast ? 'opacity-70' : ''}`}>
             <div className="flex-shrink-0 bg-background p-3 rounded-lg"><SessionIcon className="w-6 h-6 text-primary" /></div>
             <div className="flex-grow">
                 <p className="font-bold text-lg text-on-surface">{session.courtName} - {session.courtDivision}</p>

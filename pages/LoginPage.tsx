@@ -1,17 +1,10 @@
-import React, { useState } from 'react';
+
+import React from 'react';
 import { useAuth } from '../services/hooks/useAuth';
-import { UserRole } from '../types';
 import { GavelIcon } from '../components/icons';
 
 const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState('admin@example.com');
-  const [role, setRole] = useState<UserRole>(UserRole.ADMIN);
-  const { login, loading } = useAuth();
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    login(email, role);
-  };
+  const { loginWithGoogle, loading, error } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-primary-dark to-yellow-600 flex items-center justify-center p-4">
@@ -27,53 +20,44 @@ const LoginPage: React.FC = () => {
             </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
-            <div className="rounded-md shadow-sm -space-y-px">
-                 <div>
-                    <label htmlFor="email-address" className="sr-only">البريد الإلكتروني</label>
-                    <input
-                        id="email-address"
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        required
-                        className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary-light focus:border-primary-light focus:z-10 sm:text-sm"
-                        placeholder="البريد الإلكتروني"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
+        <div className="mt-8 space-y-6">
+            {error && (
+                <div className="bg-red-50 border-r-4 border-red-500 p-4 mb-4">
+                    <p className="text-sm text-red-700 text-right">{error}</p>
                 </div>
-                 <div>
-                    <label htmlFor="role" className="sr-only">الدور</label>
-                    <select
-                        id="role"
-                        name="role"
-                        required
-                        className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-light focus:border-primary-light focus:z-10 sm:text-sm"
-                        value={role}
-                        onChange={(e) => setRole(e.target.value as UserRole)}
-                    >
-                        <option value={UserRole.ADMIN}>مدير</option>
-                        <option value={UserRole.SECRETARY}>سكرتير</option>
-                        <option value={UserRole.CLIENT}>موكل</option>
-                    </select>
-                </div>
-            </div>
+            )}
             
-            <p className="text-center text-xs text-gray-500">
-                هذا تسجيل دخول تجريبي. اختر دوراً للمتابعة.
+            <p className="text-center text-sm text-gray-500">
+                يرجى تسجيل الدخول باستخدام حساب جوجل الخاص بك للوصول إلى النظام.
             </p>
 
             <div>
                 <button
-                    type="submit"
+                    onClick={loginWithGoogle}
                     disabled={loading}
-                    className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-on-primary bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light disabled:bg-gray-400"
+                    className="group relative w-full flex items-center justify-center py-3 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light disabled:bg-gray-100 transition-all duration-200"
                 >
-                    {loading ? '...جاري تسجيل الدخول' : 'تسجيل الدخول'}
+                    {loading ? (
+                        <span className="flex items-center">
+                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            جاري تسجيل الدخول...
+                        </span>
+                    ) : (
+                        <span className="flex items-center">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5 ml-3" />
+                            تسجيل الدخول باستخدام جوجل
+                        </span>
+                    )}
                 </button>
             </div>
-        </form>
+            
+            <div className="text-center text-xs text-gray-400 mt-4">
+                بالمتابعة، أنت توافق على شروط الخدمة وسياسة الخصوصية.
+            </div>
+        </div>
       </div>
     </div>
   );
